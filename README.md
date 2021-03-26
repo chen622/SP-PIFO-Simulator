@@ -1,4 +1,4 @@
-# pifo
+# SP-PIFO
 
 ## Project setup
 ```
