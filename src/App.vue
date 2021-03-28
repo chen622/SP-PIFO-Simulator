@@ -1,6 +1,6 @@
 <template>
   <a-layout class="container">
-    <a-layout-header style="background: #fff;padding: 0!important;position: absolute">
+    <a-layout-header :style="`background: #fff;padding: 0!important;line-height: ${headerHeight}px;z-index:233`">
       <a-row class="header" type="flex" justify="space-between">
         <a-col :span="8">
           <h1 class="title">SP-PIFO Simulator</h1>
@@ -12,23 +12,38 @@
         </a-col>
       </a-row>
     </a-layout-header>
-    <a-layout-content style="background: #fff;padding: 64px 10%">
-
+    <a-layout-content :style="`background: #fff;overflow: auto;padding: 20px 50px`">
+      <config-card @changeConfig="changeConfig"/>
+      <a-card style="margin: 20px 0" :hoverable="true">
+        <template v-slot:title>
+          <span class="card-title">
+            <play-square-outlined style="margin-right: 5px"/>
+            Result
+          </span>
+        </template>
+        <a-empty image="https://i.loli.net/2021/03/28/K2WvekuqXBQiLlx.png" :image-style="{height: '30vw'}"
+                 v-if="JSON.stringify(config) === '{}'" description="You should do basic configuration first!"/>
+      </a-card>
     </a-layout-content>
   </a-layout>
 </template>
 
 <script>
-import {
-  GithubOutlined
-} from '@ant-design/icons-vue';
+import {GithubOutlined, PlaySquareOutlined} from '@ant-design/icons-vue';
+import ConfigCard from "@/components/ConfigCard";
 
 export default {
   name: 'App',
-  components: {GithubOutlined},
+  components: {ConfigCard, GithubOutlined, PlaySquareOutlined},
   data() {
     return {
-      current: ''
+      headerHeight: 64,
+      config: {}
+    }
+  },
+  methods: {
+    changeConfig(config) {
+      this.config = config
     }
   }
 }
@@ -47,11 +62,11 @@ export default {
 .container {
   background: #fff;
   height: 100%;
+  overflow: hidden;
 }
 
 .header {
   width: 100vw;
-  line-height: 54px;
   box-shadow: 0 2px 8px #e0e0e0;
   padding: 0 8%;
   font-size: 22px;
@@ -61,5 +76,9 @@ export default {
   margin: 0;
   font-size: 34px;
   font-weight: bold;
+}
+
+.card-title {
+  font-size: 18px;
 }
 </style>
