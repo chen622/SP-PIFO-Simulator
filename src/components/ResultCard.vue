@@ -117,6 +117,7 @@ export default {
       }
       const item = this.packages[this.finishAmount];
       this.finishAmount++;
+      // push up
       for (let i = this.queueList.length - 1; i >= 0; i--) {
         if (item.size >= this.queueList[i].bound) {
           this.queueList[i].list.push(item);
@@ -124,10 +125,14 @@ export default {
           return;
         }
       }
+      // push down
+      // when pkt's rank < 1st queue bound
+      this.queueList[0].list.push(item);
+      // decrease all queue bounds by cost = q1-rank
       for (let i = this.queueList.length - 1; i >= 0; i--) {
-        this.queueList[i].bound--;
+        this.queueList[i].bound -= this.queueList[0].bound - item.size;
       }
-      this.popPackage();
+      //this.popPackage();
     },
     apply() {
       if (this.timer) {
