@@ -20,7 +20,7 @@
       />
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmit">Apply</a-button>
+      <a-button type="primary" @click="onSubmit">Random Distribution</a-button>
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
       <a-button type="primary" @click="onSubmitIncreasing">Increasing Distribution</a-button>
