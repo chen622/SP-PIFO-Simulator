@@ -1,8 +1,9 @@
 <template>
-  <a-row style="min-height: 400px" display="flex" justify="space-between">
+  <a-row style="min-height: 400px" type="flex" justify="space-between">
     <a-col :span="9" :gutter="16" style="border-right: 1px dashed #ddd">
       <a-list
         :grid="{ gutter: 16, xs: 1, sm: 2, lg: 4 }"
+        :locale="{emptyText: 'No more packages'}"
         :data-source="remainedPackages"
       >
         <template #renderItem="{ item, index }">
@@ -26,13 +27,18 @@
       <a-list item-layout="horizontal" :data-source="queueList">
         <template #renderItem="{ item, index }">
           <a-list-item>
-            <a-list-item-meta
-            >
-              <template #title>
-                <a href="https://www.antdv.com/">{{ `Queue #${index + 1}` }}</a>
-              </template>
-              <template #description>
+            <a-row type="flex" style="width: 100%">
+              <a-col flex="50px">
+                <div
+                  class="bound-text"
+                  :style="`background: ${$packageColor(item.bound)}`">
+                  {{ item.bound }}
+                </div>
+              </a-col>
+              <a-col flex="auto">
+                <p style="font-weight: bold;font-size: 16px;line-height: 30px">{{ `Queue #${index + 1}` }}</p>
                 <a-list
+                  :locale="{emptyText: 'Empty list'}"
                   :grid="{ gutter: 16, xs: 1, sm: 2, lg: 4 }"
                   :data-source="item.list"
                 >
@@ -51,11 +57,9 @@
                     </a-list-item>
                   </template>
                 </a-list>
-              </template>
-              <template #avatar>
-                <a-avatar :style="`color: ${$packageColor(item.bound)}!important`">{{ item.bound }}</a-avatar>
-              </template>
-            </a-list-item-meta>
+              </a-col>
+            </a-row>
+
           </a-list-item>
         </template>
       </a-list>
@@ -92,14 +96,45 @@ export default {
     return {
       finishAmount: 0,
       queueList: [],
-    };
-  },
-  mounted() {
-    for (let i = 0; i < this.queueAmount; i++) {
-      this.queueList.push({bound: 0, list: []})
+      timer: null
     }
+  },
+  methods: {
+    popPackage() {
+      if (this.finishAmount >= this.packages.length) {
+        clearInterval(this.timer)
+        return
+      }
+      const item = this.packages[this.finishAmount]
+      this.finishAmount++
+      for (let i = this.queueList.length - 1; i >= 0; i--) {
+        if (item.size >= this.queueList[i].bound) {
+          this.queueList[i].list.push(item)
+          this.queueList[i].bound = item.size
+          return
+        }
+      }
+      for (let i = this.queueList.length - 1; i >= 0; i--) {
+        this.queueList[i].bound--
+      }
+      this.popPackage()
+    },
+    apply() {
+      if (this.timer) {
+        clearInterval(this.timer)
+      }
+      this.queueList = []
+      this.finishAmount = 0
+      for (let i = 0; i < this.queueAmount; i++) {
+        this.queueList.push({bound: 0, list: []})
+      }
+      this.timer = setInterval(this.popPackage, this.timeInterval * 1000)
+    },
+  },
+  beforeUnmount() {
+    clearInterval(this.timer)
   }
-};
+}
 </script>
 
 <style scoped>
@@ -116,5 +151,15 @@ export default {
 
 .package >>> .anticon {
   font-size: 22px;
+}
+
+.bound-text {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 18px;
+  color: #fff;
 }
 </style>

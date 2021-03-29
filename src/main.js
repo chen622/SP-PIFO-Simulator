@@ -7,7 +7,7 @@ import 'ant-design-vue/dist/antd.css';
 const app = createApp(App);
 app.config.productionTip = false;
 app.config.globalProperties.$packageColor = function (size) {
-    let color = "";
+    let color = "#aaa";
     switch (size) {
         case 1:
             color = "#FF0033";

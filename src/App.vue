@@ -43,7 +43,7 @@
           v-if="JSON.stringify(config) === '{}'"
           description="You should do basic configuration first!"
         />
-        <result-card v-else :packages="config.packages"></result-card>
+        <result-card v-else :packages="config.packages" :queueAmount="config.queueAmount" :timeInterval="config.timeInterval" ref="resultCard"></result-card>
       </a-card>
     </a-layout-content>
   </a-layout>
@@ -72,6 +72,9 @@ export default {
   methods: {
     changeConfig(config) {
       this.config = config;
+      this.$nextTick(()=>{
+        this.$refs.resultCard.apply()
+      })
     },
   },
 };

@@ -104,7 +104,7 @@ export default {
       newPack: 1,
       sizeRange: { min: 1, max: 5 },
       formState: {
-        queueAmount: 8,
+        queueAmount: 3,
         timeInterval: 1,
         packages: [
           { size: 1, id: 1 },
