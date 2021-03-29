@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     changeConfig(config) {
-      this.config = config;
+      this.config = JSON.parse(JSON.stringify(config))
       this.$nextTick(()=>{
         this.$refs.resultCard.apply()
       })

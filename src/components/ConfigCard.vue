@@ -22,7 +22,7 @@
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
       <a-button type="primary" @click="onSubmit">Apply</a-button>
     </a-form-item>
-    <br />
+    <br/>
     <a-form-item
       label="Packages"
       class="package-info"
@@ -44,7 +44,7 @@
               @click="movePackage(index, 'left')"
             >
               <template #icon>
-                <left-outlined />
+                <left-outlined/>
               </template>
             </a-button>
             <a-button
@@ -54,7 +54,7 @@
               @click="movePackage(index, 'right')"
             >
               <template #icon>
-                <right-outlined />
+                <right-outlined/>
               </template>
             </a-button>
           </div>
@@ -64,7 +64,8 @@
           @close="handleRemove(pack.id)"
           :color="$packageColor(pack.size)"
         >
-          <span class="small">#{{ index + 1 }} </span> <span class="big"> {{ pack.size }}</span>
+          <div class="small">#{{ index + 1 }}</div>
+          <div class="big"> {{ pack.size }}</div>
         </a-tag>
       </a-popover>
       <a-input-number
@@ -81,7 +82,7 @@
         @click="showAddTag"
         style="background: #fff; border-style: dashed; font-size: 12px"
       >
-        <plus-outlined />
+        <plus-outlined/>
         New Package
       </a-tag>
     </a-form-item>
@@ -97,26 +98,20 @@ import {
 
 export default {
   name: "ConfigCard",
-  components: { PlusOutlined, LeftOutlined, RightOutlined },
+  components: {PlusOutlined, LeftOutlined, RightOutlined},
   data() {
     return {
       inputVisible: false,
       newPack: 1,
-      sizeRange: { min: 1, max: 5 },
+      sizeRange: {min: 0, max: 100},
       formState: {
         queueAmount: 3,
         timeInterval: 1,
-        packages: [
-          { size: 1, id: 1 },
-          { size: 2, id: 2 },
-          { size: 3, id: 3 },
-        ],
+        packages: [],
       },
     };
   },
-  computed: {
-    
-  },
+  computed: {},
   methods: {
     onSubmit() {
       if (this.formState.packages.length < 1) {
@@ -143,7 +138,7 @@ export default {
           this.newPack >= this.sizeRange.min &&
           this.newPack <= this.sizeRange.max
         ) {
-          this.formState.packages.push({ size: this.newPack, id: Date.now() });
+          this.formState.packages.push({size: this.newPack, id: Date.now()});
           this.inputVisible = false;
         } else {
           this.$message.error(
@@ -174,6 +169,13 @@ export default {
       this.formState.packages = newPackages;
     },
   },
+  mounted() {
+    const array = [];
+    for (let index = 0; index < 500; index++) {
+      array.push({size: Math.round(Math.random() * 100), id: index});
+    }
+    this.formState.packages = array;
+  },
 };
 </script>
 
@@ -188,14 +190,19 @@ export default {
 }
 
 .package-info >>> .small {
+  display: inline-block;
   font-size: 11px;
   line-height: 24px;
   font-weight: 300;
+  width: 24px
 }
 
 .package-info >>> .big {
+  display: inline-block;
+  text-align: right;
   font-weight: bold;
   margin: 0 4px 0 6px;
+  width: 30px;
 }
 
 .package-info >>> .anticon-close {
