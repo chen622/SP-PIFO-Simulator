@@ -132,7 +132,6 @@ export default {
       for (let i = this.queueList.length - 1; i >= 0; i--) {
         this.queueList[i].bound -= this.queueList[0].bound - item.size;
       }
-      //this.popPackage();
     },
     apply() {
       if (this.timer) {

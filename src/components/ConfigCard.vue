@@ -13,7 +13,7 @@
         style="min-width: 200px"
         v-model:value="formState.timeInterval"
         :min="0"
-        :max="2"
+        :max="4"
         :step="0.2"
         :formatter="(value) => `${value} sec`"
         :parser="(value) => value.replace('sec', '')"
@@ -21,6 +21,18 @@
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
       <a-button type="primary" @click="onSubmit">Apply</a-button>
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmitIncreasing">Increasing Distribution</a-button>
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmitDecreasing">Decreasing Distribution</a-button>
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmitWavingIn">Increasing Waving Distribution</a-button>
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmitWavingDe">Decreasing Waving Distribution</a-button>
     </a-form-item>
     <br/>
     <a-form-item
@@ -103,7 +115,7 @@ export default {
     return {
       inputVisible: false,
       newPack: 1,
-      sizeRange: {min: 0, max: 100},
+      sizeRange: {min: 1, max: 100},
       formState: {
         queueAmount: 3,
         timeInterval: 1,
@@ -114,6 +126,60 @@ export default {
   computed: {},
   methods: {
     onSubmit() {
+      if (this.formState.packages.length < 1) {
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("changeConfig", this.formState);
+    },
+    onSubmitIncreasing() {
+      const array = [];
+      for (let index = 0; index < 100; index++) {
+        array.push({size: index + 1, id: index});
+      }
+      this.formState.packages = array;
+
+      if (this.formState.packages.length < 1) {
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("changeConfig", this.formState);
+    },
+    onSubmitDecreasing() {
+      const array = [];
+      for (let index = 0; index < 100; index++) {
+        array.push({size: 100 - index, id: index});
+      }
+      this.formState.packages = array;
+
+      if (this.formState.packages.length < 1) {
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("changeConfig", this.formState);
+    },
+    onSubmitWavingIn() {
+      const array = [];
+      for (let index = 0; index < 50; index++) {
+        array.push({size: index + 1, id: index});
+        array.push({size: 100 - index, id: index});
+      }
+      this.formState.packages = array;
+
+      if (this.formState.packages.length < 1) {
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("changeConfig", this.formState);
+    },
+    onSubmitWavingDe() {
+      const array = [];
+      for (let index = 0; index < 50; index++) {
+        array.push({size: 100 - index, id: index});
+        array.push({size: index + 1, id: index});
+      }
+      this.formState.packages = array;
+
       if (this.formState.packages.length < 1) {
         this.$message.error("Packages can not be empty");
         return;
@@ -171,7 +237,7 @@ export default {
   },
   mounted() {
     const array = [];
-    for (let index = 0; index < 500; index++) {
+    for (let index = 0; index < 100; index++) {
       array.push({size: Math.round(Math.random() * 100), id: index});
     }
     this.formState.packages = array;
