@@ -1,52 +1,80 @@
 <template>
   <a-layout class="container">
-    <a-layout-header :style="`background: #fff;padding: 0!important;line-height: ${headerHeight}px;z-index:233`">
+    <a-layout-header
+      :style="`background: #fff;padding: 0!important;line-height: ${headerHeight}px;z-index:233`"
+    >
       <a-row class="header" type="flex" justify="space-between">
         <a-col :span="8">
           <h1 class="title">SP-PIFO Simulator</h1>
         </a-col>
         <a-col :span="8" style="text-align: right">
-          <a style="color: black" href="https://github.com/chen622/SP-PIFO-Simulator" target="_blank">
-            <github-outlined/>
+          <a
+            style="color: black"
+            href="https://github.com/chen622/SP-PIFO-Simulator"
+            target="_blank"
+          >
+            <github-outlined />
           </a>
         </a-col>
       </a-row>
     </a-layout-header>
-    <a-layout-content :style="`background: #fff;overflow: auto;padding: 20px 50px`">
-      <config-card @changeConfig="changeConfig"/>
+    <a-layout-content
+      :style="`background: #fff;overflow: auto;padding: 20px 50px`"
+    >
+      <a-card :hoverable="true">
+        <template v-slot:title>
+          <span class="card-title">
+            <setting-outlined style="margin-right: 5px" />
+            Configuration
+          </span>
+        </template>
+        <config-card @changeConfig="changeConfig" />
+      </a-card>
       <a-card style="margin: 20px 0" :hoverable="true">
         <template v-slot:title>
           <span class="card-title">
-            <play-square-outlined style="margin-right: 5px"/>
+            <play-square-outlined style="margin-right: 5px" />
             Result
           </span>
         </template>
-        <a-empty image="https://i.loli.net/2021/03/28/K2WvekuqXBQiLlx.png" :image-style="{height: '30vw'}"
-                 v-if="JSON.stringify(config) === '{}'" description="You should do basic configuration first!"/>
+        <a-empty
+          image="https://i.loli.net/2021/03/28/K2WvekuqXBQiLlx.png"
+          :image-style="{ height: '30vw' }"
+          v-if="JSON.stringify(config) === '{}'"
+          description="You should do basic configuration first!"
+        />
+        <result-card v-else :packages="config.packages"></result-card>
       </a-card>
     </a-layout-content>
   </a-layout>
 </template>
 
 <script>
-import {GithubOutlined, PlaySquareOutlined} from '@ant-design/icons-vue';
+import { GithubOutlined, PlaySquareOutlined, SettingOutlined} from "@ant-design/icons-vue";
 import ConfigCard from "@/components/ConfigCard";
+import ResultCard from "@/components/ResultCard";
 
 export default {
-  name: 'App',
-  components: {ConfigCard, GithubOutlined, PlaySquareOutlined},
+  name: "App",
+  components: {
+    ConfigCard,
+    ResultCard,
+    GithubOutlined,
+    PlaySquareOutlined,
+    SettingOutlined,
+  },
   data() {
     return {
       headerHeight: 64,
-      config: {}
-    }
+      config: {},
+    };
   },
   methods: {
     changeConfig(config) {
-      this.config = config
-    }
-  }
-}
+      this.config = config;
+    },
+  },
+};
 </script>
 
 <style>
