@@ -34,6 +34,12 @@
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
       <a-button type="primary" @click="onSubmitWavingDe">Decreasing Waving Distribution</a-button>
     </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmitGaussian">Gaussian Distribution</a-button>
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmitPossion">Possion Distribution</a-button>
+    </a-form-item>
     <br/>
     <a-form-item
       label="Packages"
@@ -177,6 +183,34 @@ export default {
       for (let index = 0; index < 50; index++) {
         array.push({size: 100 - index, id: index});
         array.push({size: index + 1, id: index});
+      }
+      this.formState.packages = array;
+
+      if (this.formState.packages.length < 1) {
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("changeConfig", this.formState);
+    },
+    onSubmitGaussian() {
+      const array = [];
+      const data = [45, 48, 65, 68, 68, 10, 84, 22, 37, 88, 71, 89, 89, 13, 59, 66, 40, 88, 47, 89, 82, 38, 26, 78, 73, 10, 21, 81, 70, 80, 48, 65, 83, 89, 50, 30, 20, 20, 15, 40, 33, 66, 10, 58, 33, 32, 75, 24, 36, 76];
+      for (let index = 0; index < 50; index++) {
+        array.push({size: data[index], id: index});
+      }
+      this.formState.packages = array;
+
+      if (this.formState.packages.length < 1) {
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("changeConfig", this.formState);
+    },
+    onSubmitPossion() {
+      const array = [];
+      const data = [29, 18, 19, 23, 24, 33, 19, 29, 22, 27, 24, 27, 28, 27, 27, 25, 24, 23, 33, 26, 25, 34, 21, 31, 31, 23, 19, 19, 28, 24, 23, 27, 28, 29, 28, 26, 25, 23, 25, 28, 23, 32, 17, 26, 40, 20, 21, 24, 23, 19];
+      for (let index = 0; index < 50; index++) {
+        array.push({size: data[index], id: index});
       }
       this.formState.packages = array;
 
