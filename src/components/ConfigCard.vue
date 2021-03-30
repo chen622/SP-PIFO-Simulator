@@ -20,32 +20,14 @@
       />
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmit">Random Distribution</a-button>
+      <a-button type="primary" @click="onSubmit">Apply</a-button>
     </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmitIncreasing">Increasing Distribution</a-button>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmitDecreasing">Decreasing Distribution</a-button>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmitWavingIn">Increasing Waving Distribution</a-button>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmitWavingDe">Decreasing Waving Distribution</a-button>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmitGaussian">Gaussian Distribution</a-button>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmitPossion">Possion Distribution</a-button>
-    </a-form-item>
-    <br/>
+    <br />
     <a-form-item
       label="Packages"
       class="package-info"
       :autoLink="false"
-      style="margin-top: 10px"
+      style="margin: 10px 0"
     >
       <a-popover
         v-for="(pack, index) in formState.packages"
@@ -62,7 +44,7 @@
               @click="movePackage(index, 'left')"
             >
               <template #icon>
-                <left-outlined/>
+                <left-outlined />
               </template>
             </a-button>
             <a-button
@@ -72,7 +54,7 @@
               @click="movePackage(index, 'right')"
             >
               <template #icon>
-                <right-outlined/>
+                <right-outlined />
               </template>
             </a-button>
           </div>
@@ -83,7 +65,7 @@
           :color="$packageColor(pack.size)"
         >
           <div class="small">#{{ index + 1 }}</div>
-          <div class="big"> {{ pack.size }}</div>
+          <div class="big">{{ pack.size }}</div>
         </a-tag>
       </a-popover>
       <a-input-number
@@ -100,10 +82,30 @@
         @click="showAddTag"
         style="background: #fff; border-style: dashed; font-size: 12px"
       >
-        <plus-outlined/>
+        <plus-outlined />
         New Package
       </a-tag>
     </a-form-item>
+    <br />
+    <a-form-item label="Common Distribution" class="distribution-items">
+      <a-button @click="onSubmitRandom">Random</a-button>
+      <a-button @click="onSubmitIncreasing">Increasing</a-button>
+      <a-button @click="onSubmitDecreasing">Decreasing</a-button>
+      <a-button @click="onSubmitWavingIn"
+        >Increasing Waving</a-button
+      >
+      <a-button @click="onSubmitWavingDe"
+        >Decreasing Waving</a-button
+      >
+      <a-button @click="onSubmitGaussian">Gaussian</a-button>
+      <a-button @click="onSubmitPossion">Possion</a-button>
+    </a-form-item>
+    <a-form-item> </a-form-item>
+    <a-form-item> </a-form-item>
+    <a-form-item> </a-form-item>
+    <a-form-item> </a-form-item>
+    <a-form-item> </a-form-item>
+    <a-form-item> </a-form-item>
   </a-form>
 </template>
 
@@ -116,12 +118,12 @@ import {
 
 export default {
   name: "ConfigCard",
-  components: {PlusOutlined, LeftOutlined, RightOutlined},
+  components: { PlusOutlined, LeftOutlined, RightOutlined },
   data() {
     return {
       inputVisible: false,
       newPack: 1,
-      sizeRange: {min: 1, max: 100},
+      sizeRange: { min: 1, max: 100 },
       formState: {
         queueAmount: 3,
         timeInterval: 1,
@@ -138,87 +140,160 @@ export default {
       }
       this.$emit("changeConfig", this.formState);
     },
+    onSubmitRandom() {
+      const array = [];
+      for (let index = 0; index < 100; index++) {
+        array.push({ size: Math.round(Math.random() * 100), id: index });
+      }
+      this.formState.packages = array;
+    },
     onSubmitIncreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({size: index + 1, id: index});
+        array.push({ size: index + 1, id: index });
       }
       this.formState.packages = array;
-
-      if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
-        return;
-      }
-      this.$emit("changeConfig", this.formState);
     },
     onSubmitDecreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({size: 100 - index, id: index});
+        array.push({ size: 100 - index, id: index });
       }
       this.formState.packages = array;
-
-      if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
-        return;
-      }
-      this.$emit("changeConfig", this.formState);
     },
     onSubmitWavingIn() {
       const array = [];
       for (let index = 0; index < 50; index++) {
-        array.push({size: index + 1, id: index});
-        array.push({size: 100 - index, id: index});
+        array.push({ size: index + 1, id: index });
+        array.push({ size: 100 - index, id: index });
       }
       this.formState.packages = array;
-
-      if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
-        return;
-      }
-      this.$emit("changeConfig", this.formState);
     },
     onSubmitWavingDe() {
       const array = [];
       for (let index = 0; index < 50; index++) {
-        array.push({size: 100 - index, id: index});
-        array.push({size: index + 1, id: index});
+        array.push({ size: 100 - index, id: index });
+        array.push({ size: index + 1, id: index });
       }
       this.formState.packages = array;
-
-      if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
-        return;
-      }
-      this.$emit("changeConfig", this.formState);
     },
     onSubmitGaussian() {
       const array = [];
-      const data = [45, 48, 65, 68, 68, 10, 84, 22, 37, 88, 71, 89, 89, 13, 59, 66, 40, 88, 47, 89, 82, 38, 26, 78, 73, 10, 21, 81, 70, 80, 48, 65, 83, 89, 50, 30, 20, 20, 15, 40, 33, 66, 10, 58, 33, 32, 75, 24, 36, 76];
+      const data = [
+        45,
+        48,
+        65,
+        68,
+        68,
+        10,
+        84,
+        22,
+        37,
+        88,
+        71,
+        89,
+        89,
+        13,
+        59,
+        66,
+        40,
+        88,
+        47,
+        89,
+        82,
+        38,
+        26,
+        78,
+        73,
+        10,
+        21,
+        81,
+        70,
+        80,
+        48,
+        65,
+        83,
+        89,
+        50,
+        30,
+        20,
+        20,
+        15,
+        40,
+        33,
+        66,
+        10,
+        58,
+        33,
+        32,
+        75,
+        24,
+        36,
+        76,
+      ];
       for (let index = 0; index < 50; index++) {
-        array.push({size: data[index], id: index});
+        array.push({ size: data[index], id: index });
       }
       this.formState.packages = array;
-
-      if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
-        return;
-      }
-      this.$emit("changeConfig", this.formState);
     },
     onSubmitPossion() {
       const array = [];
-      const data = [29, 18, 19, 23, 24, 33, 19, 29, 22, 27, 24, 27, 28, 27, 27, 25, 24, 23, 33, 26, 25, 34, 21, 31, 31, 23, 19, 19, 28, 24, 23, 27, 28, 29, 28, 26, 25, 23, 25, 28, 23, 32, 17, 26, 40, 20, 21, 24, 23, 19];
+      const data = [
+        29,
+        18,
+        19,
+        23,
+        24,
+        33,
+        19,
+        29,
+        22,
+        27,
+        24,
+        27,
+        28,
+        27,
+        27,
+        25,
+        24,
+        23,
+        33,
+        26,
+        25,
+        34,
+        21,
+        31,
+        31,
+        23,
+        19,
+        19,
+        28,
+        24,
+        23,
+        27,
+        28,
+        29,
+        28,
+        26,
+        25,
+        23,
+        25,
+        28,
+        23,
+        32,
+        17,
+        26,
+        40,
+        20,
+        21,
+        24,
+        23,
+        19,
+      ];
       for (let index = 0; index < 50; index++) {
-        array.push({size: data[index], id: index});
+        array.push({ size: data[index], id: index });
       }
       this.formState.packages = array;
-
-      if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
-        return;
-      }
-      this.$emit("changeConfig", this.formState);
     },
     showAddTag() {
       this.inputVisible = true;
@@ -238,7 +313,7 @@ export default {
           this.newPack >= this.sizeRange.min &&
           this.newPack <= this.sizeRange.max
         ) {
-          this.formState.packages.push({size: this.newPack, id: Date.now()});
+          this.formState.packages.push({ size: this.newPack, id: Date.now() });
           this.inputVisible = false;
         } else {
           this.$message.error(
@@ -269,13 +344,6 @@ export default {
       this.formState.packages = newPackages;
     },
   },
-  mounted() {
-    const array = [];
-    for (let index = 0; index < 100; index++) {
-      array.push({size: Math.round(Math.random() * 100), id: index});
-    }
-    this.formState.packages = array;
-  },
 };
 </script>
 
@@ -294,7 +362,7 @@ export default {
   font-size: 11px;
   line-height: 24px;
   font-weight: 300;
-  width: 24px
+  width: 24px;
 }
 
 .package-info >>> .big {
@@ -307,5 +375,9 @@ export default {
 
 .package-info >>> .anticon-close {
   font-size: 14px;
+}
+
+.distribution-items >>> .ant-btn {
+  margin-right: 10px
 }
 </style>
