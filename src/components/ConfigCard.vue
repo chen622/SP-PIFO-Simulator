@@ -8,7 +8,6 @@
         :max="10"
       />
     </a-form-item>
-    // test test attention this is a test
     <a-form-item label="Time Interval">
       <a-input-number
         style="min-width: 200px"
@@ -144,21 +143,21 @@ export default {
     onSubmitRandom() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: Math.round(Math.random() * 100), id: index });
+        array.push({ size: Math.round(Math.random() * 100), id: index, inversion: {}});
       }
       this.formState.packages = array;
     },
     onSubmitIncreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: index + 1, id: index });
+        array.push({ size: index + 1, id: index});
       }
       this.formState.packages = array;
     },
     onSubmitDecreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: 100 - index, id: index });
+        array.push({ size: 100 - index, id: index});
       }
       this.formState.packages = array;
     },
