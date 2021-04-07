@@ -84,7 +84,7 @@
     <a-popover v-for="(item, i) in queueList" :key="i">
       <li>Queue{{i+1}}</li>
       <a-popover v-for="(pkt, j) in item.list" :key="j">
-        R{{pkt.size}}:{{pkt.inversion}}&#12288;
+        R{{pkt.size}}:{{pkt.inversion}} {{pkt.preemption}}&#12288;;
       </a-popover>
       <li class="divider" role="presentation"></li>
     </a-popover>
@@ -179,6 +179,7 @@ export default {
             if (currentPkt.size > this.queueList[i].list[m].size) {
               // update the inversion array of the queue
               this.queueList[i].list[m].inversion.push(currentPkt.size - this.queueList[i].list[m].size);
+              this.queueList[i].list[m].preemption.push(currentPkt.size);
             }
           }
           // record inversions in lower queues
@@ -189,6 +190,7 @@ export default {
               for (let k = 0; k < this.queueList[n].list.length; k++) {
                 if (currentPkt.size > this.queueList[n].list[k].size){
                   this.queueList[n].list[k].inversion.push(currentPkt.size - this.queueList[n].list[k].size);
+                  this.queueList[n].list[k].preemption.push(currentPkt.size);
                 }
               }
             }
