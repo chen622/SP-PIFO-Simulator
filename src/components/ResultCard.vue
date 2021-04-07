@@ -35,6 +35,11 @@
                 >
                   {{ item.bound }}
                 </div>
+                <div
+                    :style="`background: ${$packageColor(item.minRank)}`"
+                >
+                  minRank:{{ item.minRank }}
+                </div>
               </a-col>
               <a-col flex="auto">
                 <p
@@ -122,12 +127,20 @@ export default {
         if (item.size >= this.queueList[i].bound) {
           this.queueList[i].list.push(item);
           this.queueList[i].bound = item.size;
+          // update the queue's minRank
+          if (item.size < this.queueList[i].minRank){
+            this.queueList[i].minRank = item.size;
+          }
           return;
         }
       }
       // push down
       // when pkt's rank < 1st queue bound
       this.queueList[0].list.push(item);
+      // update the queue's minRank
+      if (item.size < this.queueList[0].minRank){
+        this.queueList[0].minRank = item.size;
+      }
       // decrease all queue bounds by cost = q1-rank
       for (let i = this.queueList.length - 1; i >= 0; i--) {
         this.queueList[i].bound -= this.queueList[0].bound - item.size;
@@ -140,7 +153,7 @@ export default {
       this.queueList = [];
       this.finishAmount = 0;
       for (let i = 0; i < this.queueAmount; i++) {
-        this.queueList.push({ bound: 0, list: [] });
+        this.queueList.push({ bound: 0, list: [], minRank: 100});
       }
       this.timer = setInterval(this.popPackage, this.timeInterval * 1000);
     },
