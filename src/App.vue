@@ -13,7 +13,7 @@
             href="https://github.com/chen622/SP-PIFO-Simulator"
             target="_blank"
           >
-            <github-outlined />
+            <github-outlined/>
           </a>
         </a-col>
       </a-row>
@@ -24,16 +24,16 @@
       <a-card :hoverable="true">
         <template v-slot:title>
           <span class="card-title">
-            <setting-outlined style="margin-right: 5px" />
+            <setting-outlined style="margin-right: 5px"/>
             Configuration
           </span>
         </template>
-        <config-card @changeConfig="changeConfig" @resetConfig="resetConfig" />
+        <config-card @changeConfig="changeConfig" @resetConfig="resetConfig"/>
       </a-card>
       <a-card style="margin: 20px 0" :hoverable="true">
         <template v-slot:title>
           <span class="card-title">
-            <play-square-outlined style="margin-right: 5px" />
+            <play-square-outlined style="margin-right: 5px"/>
             Result
           </span>
         </template>
@@ -43,22 +43,35 @@
           v-if="JSON.stringify(config) === '{}'"
           description="You should do basic configuration first!"
         />
-        <result-card v-else :packages="config.packages" :queueAmount="config.queueAmount" :timeInterval="config.timeInterval" ref="resultCard"></result-card>
+        <result-card v-else :packages="config.packages" :queueAmount="config.queueAmount"
+                     :timeInterval="config.timeInterval" ref="resultCard"
+                     @showInversionCharts="showInversionCharts"></result-card>
+      </a-card>
+      <a-card :hoverable="true" v-show="inversionPackages.length > 0">
+        <template v-slot:title>
+          <span class="card-title">
+            <play-square-outlined style="margin-right: 5px"/>
+            Inversion
+          </span>
+        </template>
+        <inversion-card ref="inversionCard"></inversion-card>
       </a-card>
     </a-layout-content>
   </a-layout>
 </template>
 
 <script>
-import { GithubOutlined, PlaySquareOutlined, SettingOutlined} from "@ant-design/icons-vue";
+import {GithubOutlined, PlaySquareOutlined, SettingOutlined} from "@ant-design/icons-vue";
 import ConfigCard from "@/components/ConfigCard";
 import ResultCard from "@/components/ResultCard";
+import InversionCard from "@/components/InversionCard";
 
 export default {
   name: "App",
   components: {
     ConfigCard,
     ResultCard,
+    InversionCard,
     GithubOutlined,
     PlaySquareOutlined,
     SettingOutlined,
@@ -67,21 +80,28 @@ export default {
     return {
       headerHeight: 64,
       config: {},
+      inversionPackages: [],
     };
   },
   methods: {
     changeConfig(config) {
       this.config = JSON.parse(JSON.stringify(config))
-      this.$nextTick(()=>{
+      this.inversionPackages = []
+      this.$nextTick(() => {
         this.$refs.resultCard.apply()
       })
     },
     resetConfig(config) {
       this.config = JSON.parse(JSON.stringify(config))
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$refs.resultCard.transmit()
       })
     },
+    showInversionCharts(inversionPackages) {
+      console.log(inversionPackages)
+      this.inversionPackages = inversionPackages
+      this.$refs.inversionCard.changeData(inversionPackages)
+    }
   },
 };
 </script>

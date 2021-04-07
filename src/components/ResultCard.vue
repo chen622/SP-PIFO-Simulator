@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-row style="min-height: 400px" type="flex" justify="space-between">
-      <a-col :span="9" :gutter="16" style="border-right: 1px dashed #ddd; padding-right: 10px">
+      <a-col :span="10" style="border-right: 1px dashed #ddd">
         <a-list
           :grid="{ gutter: 16, xs: 1, sm: 2, lg: 4 }"
           :locale="{ emptyText: 'No more packages' }"
@@ -15,7 +15,7 @@
                 :style="`background: ${$packageColor(item.size)};`"
               >
                 <p :style="`font-weight: bold;`">
-                  <codepen-circle-filled />
+                  <codepen-circle-filled/>
                   #{{ finishAmount + 1 + index }}
                 </p>
                 <p>Size: {{ item.size }}</p>
@@ -24,25 +24,22 @@
           </template>
         </a-list>
       </a-col>
-      <a-col :span="14">
+      <a-col :span="14" style="padding-left: 10px">
+        <a-button type="primary"  @click="finishNow" v-if="finishAmount < packages.length">
+          <template #icon shape="circle">
+            <fast-forward-outlined/>
+          </template>
+        </a-button>
+
         <a-list item-layout="horizontal" :data-source="queueList">
           <template #renderItem="{ item, index }">
             <a-list-item>
-              <a-row type="flex" style="width: 100%">
-                <a-col flex="50px">
-                  <div
-                    class="bound-text"
-                    :style="`background: ${$packageColor(item.bound)}`"
-                  >
-                    {{ item.bound }}
-                  </div>
-                  <div
-                      :style="`background: ${$packageColor(item.minRank)}`"
-                  >
-                    minRank:{{ item.minRank }}
-                  </div>
-                </a-col>
-                <a-col flex="auto">
+              <div type="flex" style="width: 100%">
+                <div>
+                  <a-tag :color="$packageColor(item.bound)"> Bound: {{ item.bound }}</a-tag>
+                  <a-tag :color="$packageColor(item.minRank)"> Min Rank: {{ item.minRank }}</a-tag>
+                </div>
+                <div style="width: 100%">
                   <p
                     style="
                       font-weight: bold;
@@ -55,7 +52,7 @@
                   </p>
                   <a-list
                     :locale="{ emptyText: 'Empty list' }"
-                    :grid="{ gutter: 4, xs: 1, sm: 2, lg: 16 }"
+                    :grid="{ gutter: 4, xs: 1, sm: 2, lg: 24 }"
                     :data-source="item.list"
                     class="queue"
                   >
@@ -74,15 +71,15 @@
                       </a-list-item>
                     </template>
                   </a-list>
-                </a-col>
-              </a-row>
+                </div>
+              </div>
             </a-list-item>
           </template>
         </a-list>
       </a-col>
     </a-row>
     <a-popover v-for="(item, i) in queueList" :key="i">
-      <li>QueueList:{{i}}---Item:{{item.list[0]}}</li>
+      <li>QueueList:{{ i }}---Item:{{ item.list[0] }}</li>
       <li class="divider" role="presentation"></li>
     </a-popover>
   </div>
@@ -90,7 +87,7 @@
 
 
 <script>
-import { CodepenCircleFilled } from "@ant-design/icons-vue";
+import {CodepenCircleFilled, FastForwardOutlined} from "@ant-design/icons-vue";
 
 export default {
   name: "ResultCard",
@@ -108,7 +105,7 @@ export default {
       default: 1,
     },
   },
-  components: { CodepenCircleFilled },
+  components: {CodepenCircleFilled, FastForwardOutlined},
   computed: {
     remainedPackages() {
       return this.packages.slice(this.finishAmount);
@@ -135,7 +132,7 @@ export default {
           this.queueList[i].list.push(item);
           this.queueList[i].bound = item.size;
           // update the queue's minRank
-          if (item.size < this.queueList[i].minRank){
+          if (item.size < this.queueList[i].minRank) {
             this.queueList[i].minRank = item.size;
           }
           return;
@@ -145,7 +142,7 @@ export default {
       // when pkt's rank < 1st queue bound
       this.queueList[0].list.push(item);
       // update the queue's minRank
-      if (item.size < this.queueList[0].minRank){
+      if (item.size < this.queueList[0].minRank) {
         this.queueList[0].minRank = item.size;
       }
       // decrease all queue bounds by cost = q1-rank
@@ -160,15 +157,22 @@ export default {
       this.queueList = [];
       this.finishAmount = 0;
       for (let i = 0; i < this.queueAmount; i++) {
-        this.queueList.push({ bound: 0, list: [], minRank: 100});
+        this.queueList.push({bound: 0, list: [], minRank: 100});
       }
       this.timer = setInterval(this.popPackage, this.timeInterval * 1000);
     },
+    finishNow() {
+      clearInterval(this.timer);
+      while (this.finishAmount < this.packages.length) {
+        this.popPackage()
+      }
+    },
     transmit() {
+      let totalPackages = []
       // queue from up to down
-      for (let i = 0; i < this.queueAmount; i++){
+      for (let i = 0; i < this.queueAmount; i++) {
         // transmit pkts in a queue
-        for (let j = 0; j < this.queueList[i].list.length; j++){
+        for (let j = 0; j < this.queueList[i].list.length; j++) {
           const currentPkt = this.queueList[i].list[j];
           // record inversions in the current queue
           for (let m = j + 1; m < this.queueList[i].list.length; m++) {
@@ -184,14 +188,16 @@ export default {
             if (this.queueList[n].minRank < currentPkt.size) {
               // travers to update the inversion array of the queue
               for (let k = 0; k < this.queueList[n].list.length; k++) {
-                if (currentPkt.size > this.queueList[n].list[k].size){
+                if (currentPkt.size > this.queueList[n].list[k].size) {
                   this.queueList[n].list[k].inversion.push(currentPkt.size - this.queueList[n].list[k].size);
                 }
               }
             }
           }
         }
+        totalPackages = totalPackages.concat(this.queueList[i].list)
       }
+      this.$emit('showInversionCharts', totalPackages)
     },
   },
   beforeUnmount() {
