@@ -157,6 +157,35 @@ export default {
       }
       this.timer = setInterval(this.popPackage, this.timeInterval * 1000);
     },
+    transmit() {
+      // queue from up to down
+      for (let i = 0; i < this.queueAmount; i++){
+        // transmit pkts in a queue
+        for (let j = 0; j < this.queueList[i].list.length; j++){
+          const currentPkt = this.queueList[i].list[j];
+          // record inversions in the current queue
+          for (let m = j + 1; m < this.queueList[i].list.length; m++) {
+            // inversion occurs
+            if (currentPkt.size > this.queueList[i].list[m].size) {
+              // update the inversion array of the queue
+              this.queueList[i].list[m].inversion.push(currentPkt.size - this.queueList[i].list[m].size);
+            }
+          }
+          // record inversions in lower queues
+          for (let n = i + 1; n < this.queueAmount; n++) {
+            // inversion occurs
+            if (this.queueList[n].minRank < currentPkt.size) {
+              // travers to update the inversion array of the queue
+              for (let k = 0; k < this.queueList[n].list.length; k++) {
+                if (currentPkt.size > this.queueList[n].list[k].size){
+                  this.queueList[n].list[k].inversion.push(currentPkt.size - this.queueList[n].list[k].size);
+                }
+              }
+            }
+          }
+        }
+      }
+    },
   },
   beforeUnmount() {
     clearInterval(this.timer);

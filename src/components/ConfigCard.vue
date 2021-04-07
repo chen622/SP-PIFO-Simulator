@@ -20,7 +20,10 @@
       />
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmit">Apply</a-button>
+      <a-button type="primary" @click="onSubmit">Schedule</a-button>
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="startTransmit">Transmit</a-button>
     </a-form-item>
     <br />
     <a-form-item
@@ -140,40 +143,48 @@ export default {
       }
       this.$emit("changeConfig", this.formState);
     },
+    startTransmit() {
+      // TODO: check if the queue is empty (haven't been scheduled yet)
+      if (this.formState.packages.length < 1){
+        this.$message.error("Packages can not be empty");
+        return;
+      }
+      this.$emit("resetConfig", this.formState);
+    },
     onSubmitRandom() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: Math.round(Math.random() * 100), id: index, inversion: {}});
+        array.push({ size: Math.round(Math.random() * 100), id: index, inversion: []});
       }
       this.formState.packages = array;
     },
     onSubmitIncreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: index + 1, id: index});
+        array.push({ size: index + 1, id: index, inversion: []});
       }
       this.formState.packages = array;
     },
     onSubmitDecreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: 100 - index, id: index});
+        array.push({ size: 100 - index, id: index, inversion: []});
       }
       this.formState.packages = array;
     },
     onSubmitWavingIn() {
       const array = [];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: index + 1, id: index });
-        array.push({ size: 100 - index, id: index });
+        array.push({ size: index + 1, id: index, inversion: []});
+        array.push({ size: 100 - index, id: index, inversion: []});
       }
       this.formState.packages = array;
     },
     onSubmitWavingDe() {
       const array = [];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: 100 - index, id: index });
-        array.push({ size: index + 1, id: index });
+        array.push({ size: 100 - index, id: index, inversion: []});
+        array.push({ size: index + 1, id: index, inversion: []});
       }
       this.formState.packages = array;
     },
@@ -232,7 +243,7 @@ export default {
         76,
       ];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: data[index], id: index });
+        array.push({ size: data[index], id: index, inversion: []});
       }
       this.formState.packages = array;
     },
@@ -291,7 +302,7 @@ export default {
         19,
       ];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: data[index], id: index });
+        array.push({ size: data[index], id: index, inversion: []});
       }
       this.formState.packages = array;
     },
