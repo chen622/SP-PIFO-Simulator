@@ -129,7 +129,7 @@ export default {
       sizeRange: { min: 1, max: 100 },
       formState: {
         queueAmount: 3,
-        timeInterval: 1,
+        timeInterval: 0,
         packages: [],
       },
     };
@@ -154,37 +154,37 @@ export default {
     onSubmitRandom() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: Math.round(Math.random() * 100), id: index, inversion: []});
+        array.push({ size: Math.round(Math.random() * 100), id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
     onSubmitIncreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: index + 1, id: index, inversion: []});
+        array.push({ size: index + 1, id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
     onSubmitDecreasing() {
       const array = [];
       for (let index = 0; index < 100; index++) {
-        array.push({ size: 100 - index, id: index, inversion: []});
+        array.push({ size: 100 - index, id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
     onSubmitWavingIn() {
       const array = [];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: index + 1, id: index, inversion: []});
-        array.push({ size: 100 - index, id: index, inversion: []});
+        array.push({ size: index + 1, id: index, inversion: [], preemption: []});
+        array.push({ size: 100 - index, id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
     onSubmitWavingDe() {
       const array = [];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: 100 - index, id: index, inversion: []});
-        array.push({ size: index + 1, id: index, inversion: []});
+        array.push({ size: 100 - index, id: index, inversion: [], preemption: []});
+        array.push({ size: index + 1, id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
@@ -243,7 +243,7 @@ export default {
         76,
       ];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: data[index], id: index, inversion: []});
+        array.push({ size: data[index], id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
@@ -302,7 +302,7 @@ export default {
         19,
       ];
       for (let index = 0; index < 50; index++) {
-        array.push({ size: data[index], id: index, inversion: []});
+        array.push({ size: data[index], id: index, inversion: [], preemption: []});
       }
       this.formState.packages = array;
     },
