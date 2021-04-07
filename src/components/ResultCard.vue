@@ -82,7 +82,10 @@
       </a-col>
     </a-row>
     <a-popover v-for="(item, i) in queueList" :key="i">
-      <li>QueueList:{{i}}---Item:{{item.list[0]}}</li>
+      <li>Queue{{i+1}}</li>
+      <a-popover v-for="(pkt, j) in item.list" :key="j">
+        R{{pkt.size}}:{{pkt.inversion}}&#12288;
+      </a-popover>
       <li class="divider" role="presentation"></li>
     </a-popover>
   </div>
