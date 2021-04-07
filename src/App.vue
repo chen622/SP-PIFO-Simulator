@@ -30,6 +30,15 @@
         </template>
         <config-card @changeConfig="changeConfig" />
       </a-card>
+      <a-card :hoverable="true">
+        <template v-slot:title>
+          <span class="card-title">
+            <setting-outlined style="margin-right: 5px" />
+            Configuration
+          </span>
+        </template>
+        <config-card @resetConfig="resetConfig" />
+      </a-card>
       <a-card style="margin: 20px 0" :hoverable="true">
         <template v-slot:title>
           <span class="card-title">
@@ -74,6 +83,12 @@ export default {
       this.config = JSON.parse(JSON.stringify(config))
       this.$nextTick(()=>{
         this.$refs.resultCard.apply()
+      })
+    },
+    resetConfig(config) {
+      this.config = JSON.parse(JSON.stringify(config))
+      this.$nextTick(()=>{
+        this.$refs.resultCard.transmit()
       })
     },
   },
