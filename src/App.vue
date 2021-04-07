@@ -28,16 +28,7 @@
             Configuration
           </span>
         </template>
-        <config-card @changeConfig="changeConfig" />
-      </a-card>
-      <a-card :hoverable="true">
-        <template v-slot:title>
-          <span class="card-title">
-            <setting-outlined style="margin-right: 5px" />
-            Configuration
-          </span>
-        </template>
-        <config-card @resetConfig="resetConfig" />
+        <config-card @changeConfig="changeConfig" @resetConfig="resetConfig" />
       </a-card>
       <a-card style="margin: 20px 0" :hoverable="true">
         <template v-slot:title>
