@@ -1,86 +1,93 @@
 <template>
-  <a-row style="min-height: 400px" type="flex" justify="space-between">
-    <a-col :span="9" :gutter="16" style="border-right: 1px dashed #ddd; padding-right: 10px">
-      <a-list
-        :grid="{ gutter: 16, xs: 1, sm: 2, lg: 4 }"
-        :locale="{ emptyText: 'No more packages' }"
-        :data-source="remainedPackages"
-      >
-        <template #renderItem="{ item, index }">
-          <a-list-item>
-            <a-card
-              class="package"
-              :body-style="{ padding: '10px' }"
-              :style="`background: ${$packageColor(item.size)};`"
-            >
-              <p :style="`font-weight: bold;`">
-                <codepen-circle-filled />
-                #{{ finishAmount + 1 + index }}
-              </p>
-              <p>Size: {{ item.size }}</p>
-            </a-card>
-          </a-list-item>
-        </template>
-      </a-list>
-    </a-col>
-    <a-col :span="14">
-      <a-list item-layout="horizontal" :data-source="queueList">
-        <template #renderItem="{ item, index }">
-          <a-list-item>
-            <a-row type="flex" style="width: 100%">
-              <a-col flex="50px">
-                <div
-                  class="bound-text"
-                  :style="`background: ${$packageColor(item.bound)}`"
-                >
-                  {{ item.bound }}
-                </div>
-                <div
-                    :style="`background: ${$packageColor(item.minRank)}`"
-                >
-                  minRank:{{ item.minRank }}
-                </div>
-              </a-col>
-              <a-col flex="auto">
-                <p
-                  style="
-                    font-weight: bold;
-                    font-size: 16px;
-                    line-height: 30px;
-                    text-align: right;
-                  "
-                >
-                  {{ `Queue #${index + 1}` }}
+  <div>
+    <a-row style="min-height: 400px" type="flex" justify="space-between">
+      <a-col :span="9" :gutter="16" style="border-right: 1px dashed #ddd; padding-right: 10px">
+        <a-list
+          :grid="{ gutter: 16, xs: 1, sm: 2, lg: 4 }"
+          :locale="{ emptyText: 'No more packages' }"
+          :data-source="remainedPackages"
+        >
+          <template #renderItem="{ item, index }">
+            <a-list-item>
+              <a-card
+                class="package"
+                :body-style="{ padding: '10px' }"
+                :style="`background: ${$packageColor(item.size)};`"
+              >
+                <p :style="`font-weight: bold;`">
+                  <codepen-circle-filled />
+                  #{{ finishAmount + 1 + index }}
                 </p>
-                <a-list
-                  :locale="{ emptyText: 'Empty list' }"
-                  :grid="{ gutter: 4, xs: 1, sm: 2, lg: 16 }"
-                  :data-source="item.list"
-                  class="queue"
-                >
-                  <template #renderItem="{ item }">
-                    <a-list-item>
-                      <a-card
-                        class="package-small"
-                        :body-style="{ padding: '2px' }"
-                        :style="`background: ${$packageColor(item.size)};`"
-                      >
-                        <!-- <p :style="`font-weight: bold;`">
-                          <codepen-circle-filled />
-                        </p> -->
-                        <p>{{ item.size }}</p>
-                      </a-card>
-                    </a-list-item>
-                  </template>
-                </a-list>
-              </a-col>
-            </a-row>
-          </a-list-item>
-        </template>
-      </a-list>
-    </a-col>
-  </a-row>
+                <p>Size: {{ item.size }}</p>
+              </a-card>
+            </a-list-item>
+          </template>
+        </a-list>
+      </a-col>
+      <a-col :span="14">
+        <a-list item-layout="horizontal" :data-source="queueList">
+          <template #renderItem="{ item, index }">
+            <a-list-item>
+              <a-row type="flex" style="width: 100%">
+                <a-col flex="50px">
+                  <div
+                    class="bound-text"
+                    :style="`background: ${$packageColor(item.bound)}`"
+                  >
+                    {{ item.bound }}
+                  </div>
+                  <div
+                      :style="`background: ${$packageColor(item.minRank)}`"
+                  >
+                    minRank:{{ item.minRank }}
+                  </div>
+                </a-col>
+                <a-col flex="auto">
+                  <p
+                    style="
+                      font-weight: bold;
+                      font-size: 16px;
+                      line-height: 30px;
+                      text-align: right;
+                    "
+                  >
+                    {{ `Queue #${index + 1}` }}
+                  </p>
+                  <a-list
+                    :locale="{ emptyText: 'Empty list' }"
+                    :grid="{ gutter: 4, xs: 1, sm: 2, lg: 16 }"
+                    :data-source="item.list"
+                    class="queue"
+                  >
+                    <template #renderItem="{ item }">
+                      <a-list-item>
+                        <a-card
+                          class="package-small"
+                          :body-style="{ padding: '2px' }"
+                          :style="`background: ${$packageColor(item.size)};`"
+                        >
+                          <!-- <p :style="`font-weight: bold;`">
+                            <codepen-circle-filled />
+                          </p> -->
+                          <p>{{ item.size }}</p>
+                        </a-card>
+                      </a-list-item>
+                    </template>
+                  </a-list>
+                </a-col>
+              </a-row>
+            </a-list-item>
+          </template>
+        </a-list>
+      </a-col>
+    </a-row>
+    <a-popover v-for="(item, i) in queueList" :key="i">
+      <li>QueueList:{{i}}---Item:{{item.list[0]}}</li>
+      <li class="divider" role="presentation"></li>
+    </a-popover>
+  </div>
 </template>
+
 
 <script>
 import { CodepenCircleFilled } from "@ant-design/icons-vue";
