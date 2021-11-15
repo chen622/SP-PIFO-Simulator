@@ -46,10 +46,11 @@ export default {
       this.option = {
         xAxis: {
           type: 'category',
-          name: 'magnitude',
+          name: 'rank',
           data: x
         },
         yAxis: {
+          name: 'magnitude',
           type: 'value'
         },
         series: [{

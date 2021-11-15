@@ -27,7 +27,7 @@
     </a-form-item>
     <br />
     <a-form-item
-      label="Packages"
+      label="Packets"
       class="package-info"
       :autoLink="false"
       style="margin: 10px 0"
@@ -86,11 +86,11 @@
         style="background: #fff; border-style: dashed; font-size: 12px"
       >
         <plus-outlined />
-        New Package
+        New Packet
       </a-tag>
     </a-form-item>
     <br />
-    <a-form-item label="Common Distribution" class="distribution-items">
+    <a-form-item label="Distribution" class="distribution-items">
       <a-button @click="onSubmitRandom">Random</a-button>
       <a-button @click="onSubmitIncreasing">Increasing</a-button>
       <a-button @click="onSubmitDecreasing">Decreasing</a-button>
@@ -138,7 +138,7 @@ export default {
   methods: {
     onSubmit() {
       if (this.formState.packages.length < 1) {
-        this.$message.error("Packages can not be empty");
+        this.$message.error("Packets can not be empty");
         return;
       }
       this.$emit("changeConfig", this.formState);
@@ -146,7 +146,7 @@ export default {
     startTransmit() {
       // TODO: check if the queue is empty (haven't been scheduled yet)
       if (this.formState.packages.length < 1){
-        this.$message.error("Packages can not be empty");
+        this.$message.error("Packets can not be empty");
         return;
       }
       this.$emit("resetConfig", this.formState);
@@ -328,11 +328,11 @@ export default {
           this.inputVisible = false;
         } else {
           this.$message.error(
-            `Package size should between ${this.sizeRange.min}-${this.sizeRange.max}`
+            `Packet size should be between ${this.sizeRange.min}-${this.sizeRange.max}`
           );
         }
       } else {
-        this.$message.error("Package size should be a integer");
+        this.$message.error("Packet size should be an integer");
       }
     },
     movePackage(index, direction) {
